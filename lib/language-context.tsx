@@ -34,9 +34,9 @@ const translations: Record<Lang, Record<string, string>> = {
     "about.call": "Call",
     "about.readStory": "Read Samarjit's story",
     "about.founderMsg": "Message from Founder",
-    "about.greeting": "Hi Friends, My Self Samarjit Sharma.",
+    "about.greeting": "Hi friends, I am Samarjit Sharma.",
     "about.founderText":
-      "I live in Badsahi Road Sharma Para, Burdwan-713101. I have experience in interior designing for the last 4 years and have completed lots of residential and commercial projects across Purba Burdwan. Anyone interested in interior designing for Home, Office, Room, False Ceiling, contact me directly via website call or WhatsApp.",
+      "I am based in Badsahi Road Sharma Para, Burdwan (713101). With over 4 years of dedicated experience in interior design, I have completed numerous residential and commercial projects across Purba Burdwan. If you are interested in interior design for your Home, Office, Bedroom, or False Ceiling, please contact me directly via phone or WhatsApp.",
     "about.f1.title": "Best Quality at Affordable Price",
     "about.f1.desc":
       "We believe exceptional design shouldn't be out of reach. We use genuine Saint-Gobain gypsum, waterproof plywood, and branded hardware at transparent, budget-friendly rates.",
@@ -112,8 +112,8 @@ const translations: Record<Lang, Record<string, string>> = {
     "cta.title1": "Ready to design your",
     "cta.title2": "dream space?",
     "cta.desc":
-      "AS Designer is Interior Expert Group. We Provide Best Quality Interior Design in Effortable Price. Our Services Available in Purba Burdwan Areas.",
-    "cta.callNow": "For Booking Our Services Call +91 9874306034",
+      "AS Designer is a premier interior design studio in Burdwan. We deliver top-quality residential and commercial interior solutions at an affordable price.",
+    "cta.callNow": "To Book a Consultation, Call +91 9874306034",
     "cta.btnCall": "Call +91 9874306034",
     "cta.schedule": "Schedule a Call",
 
@@ -131,9 +131,9 @@ const translations: Record<Lang, Record<string, string>> = {
     "schedule.cancel": "Cancel",
 
     // Footer
-    "footer.subtitle": "Interior Designer Expert Solutions",
+    "footer.subtitle": "Expert Interior Design Solutions",
     "footer.about":
-      "AS Designer is Interior Expert Group. We Provide Best Quality Interior Design in Effortable Price. Our Services Available in Purba Burdwan Areas. For Booking Our Services Call +919874306034.",
+      "AS Designer is a premier interior design studio in Burdwan. We provide top-quality residential and commercial interior solutions at an affordable price across Purba Burdwan. For bookings, call +91 9874306034.",
     "footer.services": "Our Services",
     "footer.viewAllServices": "View All Services →",
     "footer.pages": "Pages",

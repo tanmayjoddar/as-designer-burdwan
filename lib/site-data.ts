@@ -28,7 +28,7 @@ export interface BlogPostItem {
 
 export const siteConfig = {
   name: "AS Designer",
-  subtitle: "Interior Designer Expert Solutions",
+  subtitle: "Expert Interior Design Solutions",
   tagline: "Best Quality Interior Design at an Affordable Price",
   phone: "9874306034",
   phoneDisplay: "+91 9874306034",
@@ -43,7 +43,7 @@ export const siteConfig = {
   },
   email: "contact@asdesigner.com",
   aboutShort:
-    "AS Designer is Interior Expert Group. We Provide Best Quality Interior Design in Effortable Price. Our Services Available in Purba Burdwan Areas For Booking Our Services Call +919874306034",
+    "AS Designer is a premier interior design studio in Burdwan. We provide top-quality residential and commercial interior design solutions at an affordable price across Purba Burdwan. For bookings, call +91 9874306034.",
   aboutShortBn:
     "এএস ডিজাইনার পূর্ব বর্ধমানের নির্ভরযোগ্য ইন্টেরিয়র বিশেষজ্ঞ গ্রুপ। আমরা সাশ্রয়ী মূল্যে সর্বোচ্চ মানের ইন্টেরিয়র ডিজাইনের কাজ করে থাকি। পূর্ব বর্ধমানের যেকোনো স্থানে বুকিংয়ের জন্য কল করুন: +৯১ ৯৮৭৪৩০৬০৩৪।",
   locationBn: "বাদশাহী রোড শর্মা পাড়া, বর্ধমান, পশ্চিমবঙ্গ - ৭১৩১০১",
@@ -61,11 +61,11 @@ export const siteConfig = {
     youtube: "http://www.youtube.com/",
   },
   tags: [
-    "Home design",
-    "Interior designed",
-    "Kitchen design",
-    "Office designe",
-    "Shop interior design",
+    "Home Design",
+    "Interior Design",
+    "Kitchen Design",
+    "Office Design",
+    "Shop Interior Design",
     "Purba Burdwan",
     "False Ceiling",
     "Modular Kitchen",
@@ -408,7 +408,7 @@ Key elements for a stylish bedroom:
   },
   {
     id: "false-ceiling",
-    title: "false Ceiling",
+    title: "False Ceiling Design",
     slug: "false-ceiling",
     date: "February 26, 2021",
     author: "AS Designer Team",
@@ -426,7 +426,7 @@ At AS Designer, our installation follows strict engineering standards:
 • Concealed fire-retardant wiring pathways with easy-access trapdoors.
 • Perfectly leveled cove lighting pockets with warm 3000K LED strips.
 • Structural anchoring tested for maximum load and longevity.`,
-    tags: ["Home design", "Interior designed", "false Ceiling"],
+    tags: ["Home Design", "Interior Design", "False Ceiling"],
     image: "/images/asdesigner/IMG-20261027-WA0030.jpg",
   },
   {
@@ -446,12 +446,12 @@ Why choose an AS Designer modular kitchen:
 • Premium European soft-close hinges and drawer runners tested for thousands of cycles.
 • Granite, quartz, and nano-white countertop options that resist oil and turmeric stains.
 • Effortless cleaning and maintenance.`,
-    tags: ["Kitchen design", "Interior designed", "Modular Kitchen"],
+    tags: ["Kitchen Design", "Interior Design", "Modular Kitchen"],
     image: "/images/asdesigner/IMG-20261027-WA0028.jpg",
   },
   {
     id: "modular-kitchen-new",
-    title: "Moderator kitchen new",
+    title: "Modern Modular Kitchen Trends",
     slug: "modular-kitchen-new",
     date: "April 15, 2021",
     author: "AS Designer Team",
@@ -468,7 +468,7 @@ Key highlights of the new generation modular kitchens:
 • Custom Corner Solutions: Magic corners and kidney-bean pull-outs that eliminate dead corner space.
 
 For site measurement and modular kitchen 3D designs in Purba Burdwan, call +919874306034.`,
-    tags: ["Kitchen design", "Interior designed"],
+    tags: ["Kitchen Design", "Interior Design"],
     image: "/images/asdesigner/IMG-20261027-WA0028.jpg",
   },
 ]

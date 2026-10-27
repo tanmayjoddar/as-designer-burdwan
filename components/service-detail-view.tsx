@@ -47,7 +47,7 @@ export function ServiceDetailView({
               </Link>
               <span>/</span>
               <Link href="/services" className="hover:text-foreground transition-colors">
-                {isBn ? "আমাদের কাজ" : "Our Service"}
+                {isBn ? "আমাদের কাজ" : "Our Services"}
               </Link>
               <span>/</span>
               <span className="text-[rgb(251,146,60)] font-medium">{displayTitle}</span>

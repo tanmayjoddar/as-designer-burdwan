@@ -40,19 +40,12 @@ export default async function ServiceDetailPage({ params }: ServicePageProps) {
   const prevService = serviceIndex > 0 ? servicesData[serviceIndex - 1] : null
   const nextService = serviceIndex < servicesData.length - 1 ? servicesData[serviceIndex + 1] : null
 
-  // Special living room comment from reference
-  const initialComments =
-    service.id === "living-room"
-      ? [
-          {
-            id: "lr-comm-1",
-            name: "A WordPress Commenter",
-            date: "February 23, 2021 at 6:35 am",
-            comment:
-              "Hi, this is a comment. To get started with moderating, editing, and deleting comments, please visit the Comments screen in the dashboard. Commenter avatars come from Gravatar.",
-          },
-        ]
-      : []
+  const initialComments: Array<{
+    id: string
+    name: string
+    date: string
+    comment: string
+  }> = []
 
   return (
     <div className="min-h-screen bg-background text-foreground">

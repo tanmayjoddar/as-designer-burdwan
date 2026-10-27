@@ -67,7 +67,7 @@ export function BookingForm({ serviceTitle, serviceTitleBn }: BookingFormProps) 
         <h3 className="text-2xl font-medium tracking-tight mt-1">
           {isBn
             ? "বুকিংয়ের জন্য ফর্মটি পূরণ করে হোয়াটসঅ্যাপ করুন"
-            : "For Booking Fill the Form & WhatsApp"}
+            : "Book a Consultation via WhatsApp"}
         </h3>
         <p className="text-sm text-muted-foreground mt-2">
           {isBn

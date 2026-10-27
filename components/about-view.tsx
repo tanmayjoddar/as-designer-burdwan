@@ -54,7 +54,7 @@ export function AboutView() {
                     </div>
 
                     <h2 className="text-2xl sm:text-3xl font-medium tracking-tight text-foreground">
-                      {isBn ? "নমস্কার বন্ধুরা, আমি সমরজিৎ শর্মা।" : "Hi Friends, My Self Samarjit Sharma."}
+                      {isBn ? "নমস্কার বন্ধুরা, আমি সমরজিৎ শর্মা।" : "Hi friends, I am Samarjit Sharma."}
                     </h2>
 
                     <div className="space-y-3 text-muted-foreground text-sm sm:text-base leading-relaxed">
@@ -73,16 +73,16 @@ export function AboutView() {
                       ) : (
                         <>
                           <p>
-                            I live in <strong className="text-foreground">Badsahi Road Sharma Para, Burdwan-713101</strong>.
-                            I have experience in interior designing for the <strong className="text-foreground">last 4 years</strong>.
+                            I am based in <strong className="text-foreground">Badsahi Road Sharma Para, Burdwan (713101)</strong>.
+                            Over the <strong className="text-foreground">past 4+ years</strong>, I have specialized in residential and commercial interior design.
                           </p>
                           <p>
-                            I complete lots of projects of interior designing across Purba Burdwan.
-                            Anyone interested in interior designing for <strong className="text-foreground">Home, Office, Room, False Ceiling</strong>,
-                            contact me directly via website call and WhatsApp at the bottom right side of the website corner.
+                            I have successfully completed numerous interior projects across Purba Burdwan.
+                            Whether you need interior design for your <strong className="text-foreground">Home, Office, Bedroom, or False Ceiling</strong>,
+                            feel free to contact me directly via phone call or WhatsApp at the bottom right.
                           </p>
                           <p className="text-foreground font-medium pt-1">
-                            If you have any type of questions, please fill the form below and make an appointment!
+                            Have questions or need an on-site consultation? Fill out the form below to book an appointment!
                           </p>
                         </>
                       )}
@@ -134,20 +134,13 @@ export function AboutView() {
                 ) : (
                   <>
                     <p>
-                      ‘AS DESIGNER’ Interior Design Inc. is a turnkey business interior design firm that has
-                      practical experience in inhabitant upgrades and bundled office furniture arrangements.
-                      We have demonstrated our capacity to make spaces that join the ergonomic, utilitarian,
-                      and tasteful segments that add to a gainful workplace.
+                      ‘AS DESIGNER’ is a trusted turnkey interior design firm specializing in residential upgrades and customized office interior solutions. We create balanced spaces that seamlessly combine ergonomic, functional, and aesthetic elements for comfortable living and productive work environments.
                     </p>
                     <p>
-                      As a solitary hotspot for turnkey business interior ventures, we have the unmistakable
-                      preferred standpoint of offering strength development administrations, design, establishment,
-                      and broadly perceived furniture marks through different obtainment vehicles.
+                      As a single-source partner for turnkey interior projects, we take pride in offering premium design, skilled craftsmanship, durable materials, and precision installation.
                     </p>
                     <p>
-                      From idea to fulfillment, we help office administrators and obtainment pros with meeting
-                      tight due dates, spending limitations, and segregating tastes. Give us a chance to put
-                      our administrations, items, and skill to work for you.
+                      From initial concept to final handover, we work closely with homeowners and office managers to meet tight deadlines, respect budget limits, and satisfy discerning tastes. Let our expertise transform your space.
                     </p>
                   </>
                 )}
@@ -156,7 +149,7 @@ export function AboutView() {
               {/* Services We Provide Grid */}
               <div className="bg-secondary/40 border border-border rounded-2xl p-6 sm:p-8">
                 <h3 className="text-xl font-medium tracking-tight mb-5 text-foreground">
-                  {isBn ? "আমরা যেসব কাজ করে থাকি:" : "We are provide services:"}
+                  {isBn ? "আমরা যেসব কাজ করে থাকি:" : "Services We Provide:"}
                 </h3>
                 <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-3">
                   {servicesData.map((s) => (

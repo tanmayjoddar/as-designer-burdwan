@@ -11,13 +11,13 @@ const _bengali = Hind_Siliguri({ subsets: ["bengali"], weight: ["300", "400", "5
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://asdesigner.epizy.com"),
-  title: "AS Designer — Interior Designer Expert Solutions",
+  title: "AS Designer — Expert Interior Design Solutions in Burdwan",
   description:
-    "AS Designer is Interior Expert Group. We Provide Best Quality Interior Design in Effortable Price. Services available in Purba Burdwan. Call +919874306034.",
+    "AS Designer is a premier interior design studio in Burdwan. We provide top-quality residential and commercial interior design solutions at an affordable price across Purba Burdwan. Call +91 9874306034.",
   openGraph: {
-    title: "AS Designer — Interior Designer Expert Solutions",
+    title: "AS Designer — Expert Interior Design Solutions in Burdwan",
     description:
-      "AS Designer is Interior Expert Group. We Provide Best Quality Interior Design in Effortable Price. Purba Burdwan West Bengal.",
+      "AS Designer is a premier interior design studio in Burdwan. We provide top-quality residential and commercial interior design solutions at an affordable price across Purba Burdwan.",
     url: "https://asdesigner.epizy.com",
     siteName: "AS Designer",
     images: [
@@ -33,9 +33,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "AS Designer — Interior Designer Expert Solutions",
+    title: "AS Designer — Expert Interior Design Solutions in Burdwan",
     description:
-      "AS Designer is Interior Expert Group in Purba Burdwan. Call +919874306034.",
+      "Premier interior design studio in Purba Burdwan. Call +91 9874306034.",
     images: ["/images/asdesigner/IMG-20261027-WA0030.jpg"],
   },
   icons: {
