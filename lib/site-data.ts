@@ -52,12 +52,10 @@ export const siteConfig = {
   phoneInternational: "+919874306034",
   whatsappNumber: "919874306034",
   location: "Badsahi Road Sharma Para, Burdwan West Bengal",
-  googleMapsUrl:
-    "https://www.google.com/maps/place/AS+Designer+Interior+%26+Exterior+Designer/@23.2553801,87.8587936,17z/data=!4m16!1m9!3m8!1s0x39f84925efd02cd3:0xa800ba14ebdebb9d!2sAS+Designer+Interior+%26+Exterior+Designer!8m2!3d23.2553801!4d87.8587936!9m1!1b1!16s%2Fg%2F11mwybl0mz!3m5!1s0x39f84925efd02cd3:0xa800ba14ebdebb9d!8m2!3d23.2553801!4d87.8587936!16s%2Fg%2F11mwybl0mz?entry=ttu",
+  googleMapsUrl: "https://maps.app.goo.gl/6AxA16yioubiXUXs9",
   googleEmbedMapUrl:
     "https://maps.google.com/maps?q=23.2553801,87.8587936&hl=en&z=17&output=embed",
-  googleReviewUrl:
-    "https://www.google.com/maps/place/AS+Designer+Interior+%26+Exterior+Designer/@23.2553801,87.8587936,17z/data=!4m8!3m7!1s0x39f84925efd02cd3:0xa800ba14ebdebb9d!8m2!3d23.2553801!4d87.8587936!9m1!1b1!16s%2Fg%2F11mwybl0mz?entry=ttu",
+  googleReviewUrl: "https://maps.app.goo.gl/6AxA16yioubiXUXs9",
   coordinates: {
     lat: 23.2553801,
     lng: 87.8587936,
