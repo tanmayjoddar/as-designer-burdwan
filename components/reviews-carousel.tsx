@@ -3,16 +3,11 @@
 import { useState, useRef, useEffect, useCallback } from "react"
 import {
   Star,
-  ChevronLeft,
-  ChevronRight,
   ExternalLink,
   ShieldCheck,
   ThumbsUp,
   MapPin,
   MessageSquare,
-  Pause,
-  Play,
-  Sparkles,
 } from "lucide-react"
 import { useLanguage } from "@/lib/language-context"
 import { googleReviewsData, siteConfig } from "@/lib/site-data"
@@ -48,9 +43,6 @@ export function ReviewsCarousel() {
   const [likes, setLikes] = useState<Record<string, number>>({})
   const [isPaused, setIsPaused] = useState(false)
   const carouselRef = useRef<HTMLDivElement>(null)
-  const [canScrollLeft, setCanScrollLeft] = useState(false)
-  const [canScrollRight, setCanScrollRight] = useState(true)
-
   const toBnDigits = useCallback((num: string | number) => {
     if (!isBn) return String(num)
     return String(num)
@@ -77,47 +69,30 @@ export function ReviewsCarousel() {
     }))
   }
 
-  const checkScroll = useCallback(() => {
-    if (!carouselRef.current) return
-    const { scrollLeft, scrollWidth, clientWidth } = carouselRef.current
-    setCanScrollLeft(scrollLeft > 10)
-    setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 10)
-  }, [])
-
-  useEffect(() => {
-    const el = carouselRef.current
-    if (!el) return
-    el.addEventListener("scroll", checkScroll, { passive: true })
-    checkScroll()
-    return () => el.removeEventListener("scroll", checkScroll)
-  }, [checkScroll, filteredReviews])
-
-  // Continuous auto-slide animation: gently advances every 3.2 seconds unless hovered or touched
+  // Smooth continuous auto-sliding animation
   useEffect(() => {
     if (isPaused) return
 
     const interval = setInterval(() => {
       const el = carouselRef.current
       if (!el) return
-      const maxScroll = el.scrollWidth - el.clientWidth
-      const step = 420
 
-      if (el.scrollLeft >= maxScroll - 20) {
-        // Loop back smoothly to the beginning
+      const maxScroll = el.scrollWidth - el.clientWidth
+      if (maxScroll <= 0) return
+
+      // Advance by one card width (approx 440-520px depending on screen)
+      const scrollStep = el.clientWidth > 768 ? 480 : 340
+      
+      if (el.scrollLeft >= maxScroll - 30) {
+        // Rewind smoothly back to first review
         el.scrollTo({ left: 0, behavior: "smooth" })
       } else {
-        el.scrollBy({ left: step, behavior: "smooth" })
+        el.scrollBy({ left: scrollStep, behavior: "smooth" })
       }
-    }, 3200)
+    }, 3500)
 
     return () => clearInterval(interval)
   }, [isPaused, filteredReviews])
-
-  const scroll = (direction: "left" | "right") => {
-    if (!carouselRef.current) return
-    const scrollAmount = direction === "left" ? -460 : 460
-    carouselRef.current.scrollBy({ left: scrollAmount, behavior: "smooth" })
-  }
 
   const filters = [
     { key: "all", label: isBn ? `সমস্ত রিভিউ (${toBnDigits(17)})` : "All Reviews (17)" },
@@ -127,7 +102,7 @@ export function ReviewsCarousel() {
   ]
 
   return (
-    <section id="reviews" className="py-24 md:py-32 bg-gradient-to-b from-background via-secondary/20 to-background border-t border-border">
+    <section id="reviews" className="py-24 md:py-32 bg-gradient-to-b from-background via-secondary/20 to-background border-t border-border scroll-mt-24">
       <div className="container mx-auto px-5 sm:px-8 md:px-12">
         {/* Section Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
@@ -144,47 +119,6 @@ export function ReviewsCarousel() {
                 ? `পূর্ব বর্ধমান জুড়ে আমাদের ক্লায়েন্টদের গুগল ম্যাপসে দেওয়া আসল মতামত ও ${toBnDigits("৪.৮")} স্টার রেটিং।`
                 : "Real feedback and 4.8-star ratings from verified homeowners and office clients in Burdwan."}
             </p>
-          </div>
-
-          {/* Navigation Controls + Auto-play status */}
-          <div className="flex items-center gap-3">
-            <button
-              onClick={() => setIsPaused(!isPaused)}
-              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-full border border-border bg-card hover:bg-secondary text-xs text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
-              title={isPaused ? "Play animation" : "Pause animation"}
-            >
-              {isPaused ? <Play className="w-3.5 h-3.5 text-[rgb(251,146,60)]" /> : <Pause className="w-3.5 h-3.5 text-emerald-500" />}
-              <span className="text-[11px] font-medium">
-                {isPaused ? (isBn ? "চালু করুন" : "Play") : (isBn ? "স্বয়ংক্রিয় চলছে" : "Auto-sliding")}
-              </span>
-            </button>
-
-            <div className="flex items-center gap-2">
-              <button
-                onClick={() => scroll("left")}
-                disabled={!canScrollLeft}
-                className={`w-12 h-12 rounded-full border border-border flex items-center justify-center transition-all cursor-pointer ${
-                  canScrollLeft
-                    ? "bg-card hover:bg-secondary text-foreground hover:scale-105 shadow-sm"
-                    : "bg-muted/30 text-muted-foreground/40 cursor-not-allowed opacity-50"
-                }`}
-                aria-label="Previous review"
-              >
-                <ChevronLeft className="w-5 h-5" />
-              </button>
-              <button
-                onClick={() => scroll("right")}
-                disabled={!canScrollRight}
-                className={`w-12 h-12 rounded-full border border-border flex items-center justify-center transition-all cursor-pointer ${
-                  canScrollRight
-                    ? "bg-card hover:bg-secondary text-foreground hover:scale-105 shadow-sm"
-                    : "bg-muted/30 text-muted-foreground/40 cursor-not-allowed opacity-50"
-                }`}
-                aria-label="Next review"
-              >
-                <ChevronRight className="w-5 h-5" />
-              </button>
-            </div>
           </div>
         </div>
 
@@ -391,13 +325,26 @@ export function ReviewsCarousel() {
           })}
         </div>
 
-        {/* Bottom prompt */}
-        <div className="mt-8 text-center text-xs text-muted-foreground flex items-center justify-center gap-2">
-          <Sparkles className="w-3.5 h-3.5 text-[rgb(251,146,60)]" />
-          <span>
+        {/* Clean Auto-sliding Status & Info Under Carousel */}
+        <div className="mt-8 flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-border/60">
+          <button
+            onClick={() => setIsPaused(!isPaused)}
+            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-border bg-card hover:bg-secondary text-xs text-muted-foreground hover:text-foreground transition-all cursor-pointer shadow-xs"
+            title={isPaused ? "Play auto-sliding" : "Pause auto-sliding"}
+          >
+            <span className="relative flex h-2 w-2">
+              <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${isPaused ? "bg-amber-400" : "bg-emerald-400"}`} />
+              <span className={`relative inline-flex rounded-full h-2 w-2 ${isPaused ? "bg-amber-500" : "bg-emerald-500"}`} />
+            </span>
+            <span className="text-[11px] font-medium">
+              {isPaused ? (isBn ? "স্বয়ংক্রিয় স্লাইড বন্ধ (চালু করতে ক্লিক করুন)" : "Auto-sliding Paused (Click to Play)") : (isBn ? "স্বয়ংক্রিয় স্লাইড চালু আছে" : "Auto-sliding Active")}
+            </span>
+          </button>
+
+          <span className="text-xs text-muted-foreground text-center sm:text-right">
             {isBn
-              ? `পূর্ব বর্ধমানে বিশ্বস্ত হোম ও অফিস ইন্টেরিয়র সার্ভিস • কল করুন: ${siteConfig.phoneDisplayBn}`
-              : `Trusted home & commercial interior design in Purba Burdwan • Call: ${siteConfig.phoneDisplay}`}
+              ? `পূর্ব বর্ধমানে বিশ্বস্ত ইন্টেরিয়র সার্ভিস • কল: ${siteConfig.phoneDisplayBn}`
+              : `Purba Burdwan Trusted Interior Service • Call: ${siteConfig.phoneDisplay}`}
           </span>
         </div>
       </div>

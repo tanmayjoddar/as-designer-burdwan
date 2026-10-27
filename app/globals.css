@@ -122,9 +122,11 @@
   }
   body {
     @apply bg-background text-foreground;
+    -webkit-tap-highlight-color: transparent;
   }
   html {
     scroll-behavior: smooth;
+    scroll-padding-top: 5rem;
   }
 }
 

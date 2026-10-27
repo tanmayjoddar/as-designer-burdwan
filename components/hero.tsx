@@ -90,7 +90,7 @@ export function Hero() {
 
             <h1
               ref={titleRef}
-              className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-medium tracking-tight leading-[1.15] sm:leading-[1.05] lg:leading-[0.9] text-white"
+              className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-medium tracking-tight leading-[1.12] sm:leading-[1.05] lg:leading-[0.9] text-white"
             >
               <span>{t("hero.title1")}</span>
               <br />

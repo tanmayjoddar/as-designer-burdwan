@@ -77,7 +77,16 @@ export function Header() {
           )}
         >
           {/* Logo / Brand Name - Clean unified architectural wordmark without any icon badge */}
-          <Link href="/" className="group flex items-center gap-1.5 sm:gap-2 relative z-50 py-1">
+          <Link
+            href="/"
+            onClick={(e) => {
+              if (pathname === "/") {
+                e.preventDefault()
+                window.scrollTo({ top: 0, behavior: "smooth" })
+              }
+            }}
+            className="group flex items-center gap-1.5 sm:gap-2 relative z-50 py-1"
+          >
             <span className="font-semibold tracking-[0.16em] sm:tracking-[0.22em] text-sm sm:text-base md:text-lg text-white uppercase transition-colors group-hover:text-[rgb(251,146,60)] font-sans">
               AS DESIGNER
             </span>
@@ -90,6 +99,19 @@ export function Header() {
               <Link
                 key={item.href}
                 href={item.href}
+                onClick={(e) => {
+                  if (item.href === "/" && pathname === "/") {
+                    e.preventDefault()
+                    window.scrollTo({ top: 0, behavior: "smooth" })
+                  } else if (item.href.startsWith("/#") && pathname === "/") {
+                    e.preventDefault()
+                    const targetId = item.href.replace("/#", "")
+                    const el = document.getElementById(targetId)
+                    if (el) {
+                      el.scrollIntoView({ behavior: "smooth" })
+                    }
+                  }
+                }}
                 className="px-3.5 py-1.5 text-xs font-medium tracking-wide transition-colors text-white/80 hover:text-[rgb(251,146,60)]"
               >
                 {t(item.key)}
@@ -162,12 +184,22 @@ export function Header() {
         >
           {/* Top Bar inside Drawer: Brand + Language Switcher + Close Button */}
           <div className="flex items-center justify-between pb-5 border-b border-white/10">
-            <div className="flex items-center gap-2">
-              <span className="font-semibold tracking-[0.2em] text-lg text-white uppercase font-sans">
+            <Link
+              href="/"
+              onClick={(e) => {
+                closeMobileMenu()
+                if (pathname === "/") {
+                  e.preventDefault()
+                  window.scrollTo({ top: 0, behavior: "smooth" })
+                }
+              }}
+              className="flex items-center gap-2 group cursor-pointer"
+            >
+              <span className="font-semibold tracking-[0.2em] text-lg text-white uppercase font-sans group-hover:text-[rgb(251,146,60)] transition-colors">
                 AS DESIGNER
               </span>
               <span className="w-1.5 h-1.5 rounded-full bg-[rgb(251,146,60)]" />
-            </div>
+            </Link>
 
             <div className="flex items-center gap-2.5">
               <LanguageSwitcher />
@@ -200,8 +232,23 @@ export function Header() {
               >
                 <Link
                   href={item.href}
-                  className="flex items-center gap-3 py-3 text-lg font-light tracking-wide text-white/90 hover:text-[rgb(251,146,60)] transition-colors"
-                  onClick={closeMobileMenu}
+                  className="flex items-center gap-3 py-3 text-lg font-light tracking-wide text-white/90 hover:text-[rgb(251,146,60)] transition-colors active:text-[rgb(251,146,60)]"
+                  onClick={(e) => {
+                    closeMobileMenu()
+                    if (item.href === "/" && pathname === "/") {
+                      e.preventDefault()
+                      window.scrollTo({ top: 0, behavior: "smooth" })
+                    } else if (item.href.startsWith("/#") && pathname === "/") {
+                      e.preventDefault()
+                      const targetId = item.href.replace("/#", "")
+                      setTimeout(() => {
+                        const el = document.getElementById(targetId)
+                        if (el) {
+                          el.scrollIntoView({ behavior: "smooth" })
+                        }
+                      }, 50)
+                    }
+                  }}
                 >
                   <span className="w-4 h-[1px] bg-white/30" />
                   {t(item.key)}
