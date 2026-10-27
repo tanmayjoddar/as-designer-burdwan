@@ -69,30 +69,8 @@ export function ReviewsCarousel() {
     }))
   }
 
-  // Smooth continuous auto-sliding animation
-  useEffect(() => {
-    if (isPaused) return
-
-    const interval = setInterval(() => {
-      const el = carouselRef.current
-      if (!el) return
-
-      const maxScroll = el.scrollWidth - el.clientWidth
-      if (maxScroll <= 0) return
-
-      // Advance by one card width (approx 440-520px depending on screen)
-      const scrollStep = el.clientWidth > 768 ? 480 : 340
-      
-      if (el.scrollLeft >= maxScroll - 30) {
-        // Rewind smoothly back to first review
-        el.scrollTo({ left: 0, behavior: "smooth" })
-      } else {
-        el.scrollBy({ left: scrollStep, behavior: "smooth" })
-      }
-    }, 3500)
-
-    return () => clearInterval(interval)
-  }, [isPaused, filteredReviews])
+  // Duplicated reviews to achieve seamless 100% infinite continuous loop
+  const duplicatedReviews = [...filteredReviews, ...filteredReviews]
 
   const filters = [
     { key: "all", label: isBn ? `সমস্ত রিভিউ (${toBnDigits(17)})` : "All Reviews (17)" },
@@ -236,93 +214,99 @@ export function ReviewsCarousel() {
           </div>
         </div>
 
-        {/* Big Prominent Auto-Animated Carousel */}
+        {/* Big Prominent Auto-Animated Infinite Marquee Carousel */}
         <div
-          ref={carouselRef}
+          className="relative overflow-hidden -mx-5 px-5 py-3"
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
           onTouchStart={() => setIsPaused(true)}
           onTouchEnd={() => setIsPaused(false)}
-          className="flex gap-6 sm:gap-8 overflow-x-auto pb-8 pt-2 scroll-smooth snap-x snap-mandatory scrollbar-thin scrollbar-thumb-border scrollbar-track-transparent -mx-3 px-3"
-          style={{ scrollbarWidth: "thin" }}
         >
-          {filteredReviews.map((rev) => {
-            const currentLikes = (rev.likes || 0) + (likes[rev.id] || 0)
-            const displayText = isBn && rev.textBn ? rev.textBn : rev.text
+          {/* Subtle gradient edge fades */}
+          <div className="absolute left-0 top-0 bottom-0 w-8 sm:w-16 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
+          <div className="absolute right-0 top-0 bottom-0 w-8 sm:w-16 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
 
-            return (
-              <article
-                key={rev.id}
-                className="w-[330px] sm:w-[440px] md:w-[490px] lg:w-[520px] min-h-[300px] flex-shrink-0 snap-start bg-card border border-border hover:border-[rgb(251,146,60)]/50 rounded-3xl p-7 sm:p-9 flex flex-col justify-between transition-all duration-300 hover:shadow-2xl hover:-translate-y-1.5 group relative"
-              >
-                <div>
-                  {/* Reviewer Header */}
-                  <div className="flex items-start justify-between gap-3 mb-5">
-                    <div className="flex items-center gap-4">
-                      <div
-                        className={`w-13 h-13 sm:w-14 sm:h-14 rounded-full bg-gradient-to-tr ${rev.color || "from-amber-500 to-orange-600"} text-white flex items-center justify-center font-bold text-lg sm:text-xl shadow-lg flex-shrink-0`}
-                      >
-                        {rev.avatarInitial || rev.name.charAt(0).toUpperCase()}
-                      </div>
-                      <div>
-                        <h4 className="text-base sm:text-lg font-semibold text-foreground group-hover:text-[rgb(251,146,60)] transition-colors leading-snug">
-                          {rev.name}
-                        </h4>
-                        <div className="flex items-center gap-2 mt-1 flex-wrap">
-                          {rev.localGuide && (
-                            <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-amber-600 dark:text-amber-400 bg-amber-500/10 px-2.5 py-0.5 rounded-full border border-amber-500/20">
-                              <Star className="w-3 h-3 fill-current" />
-                              Local Guide
+          <div
+            className={`flex gap-6 sm:gap-8 ${isPaused ? "animate-marquee-paused" : ""} animate-marquee`}
+          >
+            {duplicatedReviews.map((rev, idx) => {
+              const currentLikes = (rev.likes || 0) + (likes[rev.id] || 0)
+              const displayText = isBn && rev.textBn ? rev.textBn : rev.text
+
+              return (
+                <article
+                  key={`${rev.id}-${idx}`}
+                  className="w-[310px] sm:w-[420px] md:w-[460px] lg:w-[490px] min-h-[290px] flex-shrink-0 bg-card border border-border hover:border-[rgb(251,146,60)]/50 rounded-3xl p-6 sm:p-8 flex flex-col justify-between transition-all duration-300 hover:shadow-2xl hover:-translate-y-1.5 group relative"
+                >
+                  <div>
+                    {/* Reviewer Header */}
+                    <div className="flex items-start justify-between gap-3 mb-4">
+                      <div className="flex items-center gap-3.5">
+                        <div
+                          className={`w-12 h-12 sm:w-13 sm:h-13 rounded-full bg-gradient-to-tr ${rev.color || "from-amber-500 to-orange-600"} text-white flex items-center justify-center font-bold text-base sm:text-lg shadow-md flex-shrink-0`}
+                        >
+                          {rev.avatarInitial || rev.name.charAt(0).toUpperCase()}
+                        </div>
+                        <div>
+                          <h4 className="text-base sm:text-lg font-semibold text-foreground group-hover:text-[rgb(251,146,60)] transition-colors leading-snug">
+                            {rev.name}
+                          </h4>
+                          <div className="flex items-center gap-2 mt-0.5 flex-wrap">
+                            {rev.localGuide && (
+                              <span className="inline-flex items-center gap-1 text-[10px] sm:text-[11px] font-semibold text-amber-600 dark:text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded-full border border-amber-500/20">
+                                <Star className="w-3 h-3 fill-current" />
+                                Local Guide
+                              </span>
+                            )}
+                            <span className="text-xs text-muted-foreground">
+                              {rev.reviewsCount ? rev.reviewsCount.replace(/(\d+)/g, (m) => toBnDigits(m)) : (isBn ? "রিভিউয়ার" : "Reviewer")}
+                              {rev.photosCount ? ` · ${rev.photosCount.replace(/(\d+)/g, (m) => toBnDigits(m))}` : ""}
                             </span>
-                          )}
-                          <span className="text-xs text-muted-foreground">
-                            {rev.reviewsCount ? rev.reviewsCount.replace(/(\d+)/g, (m) => toBnDigits(m)) : (isBn ? "রিভিউয়ার" : "Reviewer")}
-                            {rev.photosCount ? ` · ${rev.photosCount.replace(/(\d+)/g, (m) => toBnDigits(m))}` : ""}
-                          </span>
+                          </div>
                         </div>
                       </div>
+
+                      <GoogleIcon className="w-5 h-5 flex-shrink-0 opacity-80" />
                     </div>
 
-                    <GoogleIcon className="w-5 h-5 flex-shrink-0 opacity-80" />
-                  </div>
-
-                  {/* Stars + Time Ago */}
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center gap-1 text-amber-400">
-                      {[...Array(rev.rating)].map((_, i) => (
-                        <Star key={i} className="w-4 h-4 sm:w-5 sm:h-5 fill-amber-400" />
-                      ))}
+                    {/* Stars + Time Ago */}
+                    <div className="flex items-center justify-between mb-3.5">
+                      <div className="flex items-center gap-1 text-amber-400">
+                        {[...Array(rev.rating)].map((_, i) => (
+                          <Star key={i} className="w-4 h-4 fill-amber-400" />
+                        ))}
+                      </div>
+                      <span className="text-xs text-muted-foreground font-medium">
+                        {isBn ? rev.timeAgoBn : rev.timeAgo}
+                      </span>
                     </div>
-                    <span className="text-xs sm:text-sm text-muted-foreground font-medium">
-                      {isBn ? rev.timeAgoBn : rev.timeAgo}
-                    </span>
+
+                    {/* Review Text - Clear & Readable */}
+                    <p className="text-sm sm:text-base text-foreground/90 leading-relaxed italic">
+                      “{displayText}”
+                    </p>
                   </div>
 
-                  {/* Review Text - Big, Clear & Readable */}
-                  <p className="text-base sm:text-lg text-foreground/90 leading-relaxed italic">
-                    “{displayText}”
-                  </p>
-                </div>
+                  {/* Footer of Card: Like + Verified Badge */}
+                  <div className="mt-5 pt-4 border-t border-border flex items-center justify-between text-xs text-muted-foreground">
+                    <button
+                      onClick={() => handleLike(rev.id)}
+                      className="inline-flex items-center gap-1.5 hover:text-[rgb(251,146,60)] transition-colors cursor-pointer"
+                      title="Like this review"
+                    >
+                      <ThumbsUp className="w-3.5 h-3.5" />
+                      <span>{toBnDigits(currentLikes)} {isBn ? "পছন্দ" : "Helpful"}</span>
+                    </button>
 
-                {/* Footer of Card: Like + Verified Badge */}
-                <div className="mt-6 pt-5 border-t border-border flex items-center justify-between text-xs sm:text-sm text-muted-foreground">
-                  <button
-                    onClick={() => handleLike(rev.id)}
-                    className="inline-flex items-center gap-1.5 hover:text-[rgb(251,146,60)] transition-colors cursor-pointer"
-                    title="Like this review"
-                  >
-                    <ThumbsUp className="w-4 h-4" />
-                    <span>{toBnDigits(currentLikes)} {isBn ? "পছন্দ" : "Helpful"}</span>
-                  </button>
-
-                  <div className="inline-flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400 font-medium text-xs sm:text-sm">
-                    <ShieldCheck className="w-4 h-4" />
-                    <span>{isBn ? "যাচাইকৃত গুগল রিভিউ" : "Verified Google Review"}</span>
+                    <div className="inline-flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400 font-medium text-xs">
+                      <ShieldCheck className="w-3.5 h-3.5" />
+                      <span>{isBn ? "যাচাইকৃত গুগল রিভিউ" : "Verified Google Review"}</span>
+                    </div>
                   </div>
-                </div>
-              </article>
-            )
-          })}
+                </article>
+              )
+            })}
+          </div>
         </div>
 
         {/* Clean Auto-sliding Status & Info Under Carousel */}

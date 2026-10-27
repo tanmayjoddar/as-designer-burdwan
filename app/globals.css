@@ -147,3 +147,27 @@
   stroke-dashoffset: 1000;
   animation: draw-stroke 1.5s ease-out forwards;
 }
+
+/* Continuous infinite marquee carousel animation */
+@keyframes infinite-marquee {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  display: flex;
+  width: max-content;
+  animation: infinite-marquee 45s linear infinite;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+.animate-marquee-paused {
+  animation-play-state: paused !important;
+}
