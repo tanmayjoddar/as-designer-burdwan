@@ -3,6 +3,7 @@ import { Hero } from "@/components/hero"
 import { Philosophy } from "@/components/philosophy"
 import { Expertise } from "@/components/expertise"
 import { Projects } from "@/components/projects"
+import { ReviewsCarousel } from "@/components/reviews-carousel"
 import { FAQ } from "@/components/faq"
 import { CallToAction } from "@/components/call-to-action"
 import { Footer } from "@/components/footer"
@@ -16,6 +17,7 @@ export default function Home() {
       <Philosophy />
       <Expertise />
       <Projects />
+      <ReviewsCarousel />
       <FAQ />
       <CallToAction />
       <Footer />

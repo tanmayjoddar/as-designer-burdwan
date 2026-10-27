@@ -4,7 +4,7 @@ import { useLanguage } from "@/lib/language-context"
 import { ServiceSidebar } from "@/components/service-sidebar"
 import { BookingForm } from "@/components/booking-form"
 import { siteConfig } from "@/lib/site-data"
-import { MapPin, Phone, Clock, MessageSquare } from "lucide-react"
+import { MapPin, Phone, Clock, MessageSquare, Navigation, ExternalLink, Star } from "lucide-react"
 
 export function ContactView() {
   const { lang } = useLanguage()
@@ -116,6 +116,77 @@ export function ContactView() {
                       </>
                     )}
                   </p>
+                </div>
+              </div>
+
+              {/* Brilliant Google Maps Location UI */}
+              <div className="bg-card border border-border rounded-3xl overflow-hidden shadow-sm">
+                <div className="p-6 sm:p-8 border-b border-border flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                  <div>
+                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-secondary border border-border text-xs uppercase tracking-widest text-[rgb(251,146,60)] font-semibold mb-2">
+                      <MapPin className="w-3.5 h-3.5" />
+                      <span>{isBn ? "লাইভ গুগল ম্যাপ" : "Live Google Map"}</span>
+                    </div>
+                    <h3 className="text-2xl font-medium tracking-tight">
+                      {isBn ? "আমাদের স্টুডিও ও অফিসের অবস্থান" : "Studio & Office Location"}
+                    </h3>
+                    <p className="text-xs sm:text-sm text-muted-foreground mt-1">
+                      {isBn ? siteConfig.locationBn : siteConfig.location}
+                    </p>
+                  </div>
+
+                  <div className="flex items-center gap-2.5 flex-wrap">
+                    <a
+                      href={siteConfig.googleMapsUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[rgb(251,146,60)] hover:bg-[rgb(234,130,47)] text-white text-xs font-semibold transition-all shadow-sm group"
+                    >
+                      <Navigation className="w-3.5 h-3.5 transition-transform group-hover:scale-110" />
+                      <span>{isBn ? "গুগল ম্যাপে ডিরেকশন নিন" : "Get Directions"}</span>
+                      <ExternalLink className="w-3 h-3 opacity-80" />
+                    </a>
+                    <a
+                      href={siteConfig.googleReviewUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-full border border-border bg-secondary hover:bg-secondary/80 text-xs font-medium text-foreground transition-colors"
+                    >
+                      <Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
+                      <span>{isBn ? "৪.৮ (১৭ রিভিউ)" : "4.8 (17 Reviews)"}</span>
+                    </a>
+                  </div>
+                </div>
+
+                {/* Embedded Interactive Map */}
+                <div className="relative aspect-[16/9] sm:aspect-[21/9] w-full bg-muted">
+                  <iframe
+                    title="AS Designer Google Maps Location"
+                    src={siteConfig.googleEmbedMapUrl}
+                    width="100%"
+                    height="100%"
+                    style={{ border: 0 }}
+                    allowFullScreen
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                    className="w-full h-full"
+                  />
+                </div>
+
+                <div className="p-4 sm:p-5 bg-secondary/30 flex flex-wrap items-center justify-between gap-4 text-xs text-muted-foreground">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className="font-mono text-foreground font-medium">GPS: 23.2554° N, 87.8588° E</span>
+                    <span>•</span>
+                    <span>{isBn ? "বাদশাহী রোড শর্মা পাড়া, বর্ধমান ৭১৩১০১" : "Badsahi Road Sharma Para, Burdwan 713101"}</span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <a
+                      href={`tel:${siteConfig.phoneInternational}`}
+                      className="text-[rgb(251,146,60)] font-medium hover:underline inline-flex items-center gap-1"
+                    >
+                      <Phone className="w-3 h-3" /> +91 {siteConfig.phone}
+                    </a>
+                  </div>
                 </div>
               </div>
 

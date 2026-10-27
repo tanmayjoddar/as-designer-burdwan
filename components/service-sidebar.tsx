@@ -90,14 +90,23 @@ export function ServiceSidebar() {
               )}
             </p>
           </div>
-          <div className="pt-2">
+          <div className="pt-2 flex flex-col gap-2">
+            <a
+              href={siteConfig.googleMapsUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="w-full inline-flex items-center justify-center gap-2 bg-[rgb(251,146,60)] hover:bg-[rgb(234,130,47)] text-white py-2.5 rounded-xl text-xs font-semibold transition-all shadow-sm"
+            >
+              <MapPin className="w-3.5 h-3.5" />
+              <span>{isBn ? "গুগল ম্যাপে দেখুন (৪.৮ ★)" : "View on Google Maps (4.8 ★)"}</span>
+            </a>
             <a
               href={`https://wa.me/${siteConfig.whatsappNumber}?text=Hello%20AS%20Designer,%20I%20would%20like%20to%20visit%20your%20office%20in%20Burdwan.`}
               target="_blank"
               rel="noreferrer"
               className="w-full inline-flex items-center justify-center gap-2 bg-secondary/80 hover:bg-secondary py-2.5 rounded-xl text-xs font-medium text-foreground transition-colors"
             >
-              {isBn ? "হোয়াটসঅ্যাপে লোকেশন পান" : "Get Directions / WhatsApp Location"}
+              {isBn ? "হোয়াটসঅ্যাপে লোকেশন চান" : "Get Location on WhatsApp"}
             </a>
           </div>
         </div>
