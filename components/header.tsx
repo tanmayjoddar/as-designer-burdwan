@@ -20,7 +20,8 @@ const NAV_ITEMS = [
 ] as const
 
 export function Header() {
-  const { t } = useLanguage()
+  const { t, lang } = useLanguage()
+  const isBn = lang === "bn"
   const pathname = usePathname()
   const [scrolled, setScrolled] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
@@ -105,7 +106,7 @@ export function Header() {
               title="Call AS Designer"
             >
               <Phone className="w-3.5 h-3.5 text-[rgb(251,146,60)]" />
-              <span>{siteConfig.phone}</span>
+              <span>{isBn ? siteConfig.phoneBn : siteConfig.phone}</span>
             </a>
             <Link
               href="/contact"
@@ -228,7 +229,7 @@ export function Header() {
               className="inline-flex items-center justify-center gap-2 w-full text-xs font-medium px-5 py-3 rounded-full bg-white text-foreground hover:bg-[rgb(251,146,60)] hover:text-white transition-all shadow-sm"
             >
               <Phone className="w-3.5 h-3.5 text-[rgb(251,146,60)]" />
-              <span>Call +91 9874306034</span>
+              <span>{isBn ? `কল করুন ${siteConfig.phoneDisplayBn}` : `Call ${siteConfig.phoneDisplay}`}</span>
             </a>
             <Link
               href="/contact"

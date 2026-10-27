@@ -52,7 +52,7 @@ export function ContactView() {
                     href={`tel:${siteConfig.phoneInternational}`}
                     className="text-lg font-semibold text-foreground hover:text-[rgb(251,146,60)] transition-colors"
                   >
-                    {siteConfig.phoneDisplay}
+                    {isBn ? siteConfig.phoneDisplayBn : siteConfig.phoneDisplay}
                   </a>
                 </div>
 
@@ -72,7 +72,7 @@ export function ContactView() {
                     rel="noreferrer"
                     className="text-lg font-semibold text-[#25D366] hover:underline"
                   >
-                    +91 {siteConfig.phone}
+                    {isBn ? siteConfig.phoneDisplayBn : `+91 ${siteConfig.phone}`}
                   </a>
                 </div>
 
@@ -184,7 +184,7 @@ export function ContactView() {
                       href={`tel:${siteConfig.phoneInternational}`}
                       className="text-[rgb(251,146,60)] font-medium hover:underline inline-flex items-center gap-1"
                     >
-                      <Phone className="w-3 h-3" /> +91 {siteConfig.phone}
+                      <Phone className="w-3 h-3" /> {isBn ? siteConfig.phoneDisplayBn : `+91 ${siteConfig.phone}`}
                     </a>
                   </div>
                 </div>

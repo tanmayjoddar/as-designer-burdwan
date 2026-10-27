@@ -49,6 +49,8 @@ export const siteConfig = {
   tagline: "Best Quality Interior Design at an Affordable Price",
   phone: "9874306034",
   phoneDisplay: "+91 9874306034",
+  phoneDisplayBn: "+৯১ ৯৮৭৪৩০৬০৩৪",
+  phoneBn: "৯৮৭৪৩০৬০৩৪",
   phoneInternational: "+919874306034",
   whatsappNumber: "919874306034",
   location: "Badsahi Road Sharma Para, Burdwan West Bengal",

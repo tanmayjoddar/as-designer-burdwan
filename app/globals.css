@@ -76,8 +76,8 @@
 }
 
 @theme inline {
-  --font-sans: "Satoshi", "Satoshi Fallback", "Hind Siliguri", "Noto Sans Bengali", system-ui, sans-serif;
-  --font-mono: "Geist Mono", "Geist Mono Fallback";
+  --font-sans: var(--font-bengali), "Satoshi", "Satoshi Fallback", "Hind Siliguri", "Noto Sans Bengali", system-ui, sans-serif;
+  --font-mono: var(--font-bengali), "Geist Mono", monospace;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);

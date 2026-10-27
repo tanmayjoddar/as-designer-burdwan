@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useRef, useEffect } from "react"
+import { useState, useRef, useEffect, useCallback } from "react"
 import {
   Star,
   ChevronLeft,
@@ -10,6 +10,9 @@ import {
   ThumbsUp,
   MapPin,
   MessageSquare,
+  Pause,
+  Play,
+  Sparkles,
 } from "lucide-react"
 import { useLanguage } from "@/lib/language-context"
 import { googleReviewsData, siteConfig } from "@/lib/site-data"
@@ -43,9 +46,25 @@ export function ReviewsCarousel() {
 
   const [activeTag, setActiveTag] = useState<string>("all")
   const [likes, setLikes] = useState<Record<string, number>>({})
+  const [isPaused, setIsPaused] = useState(false)
   const carouselRef = useRef<HTMLDivElement>(null)
   const [canScrollLeft, setCanScrollLeft] = useState(false)
   const [canScrollRight, setCanScrollRight] = useState(true)
+
+  const toBnDigits = useCallback((num: string | number) => {
+    if (!isBn) return String(num)
+    return String(num)
+      .replace(/0/g, "০")
+      .replace(/1/g, "১")
+      .replace(/2/g, "২")
+      .replace(/3/g, "৩")
+      .replace(/4/g, "৪")
+      .replace(/5/g, "৫")
+      .replace(/6/g, "৬")
+      .replace(/7/g, "৭")
+      .replace(/8/g, "৮")
+      .replace(/9/g, "৯")
+  }, [isBn])
 
   const filteredReviews = activeTag === "all"
     ? googleReviewsData
@@ -58,12 +77,12 @@ export function ReviewsCarousel() {
     }))
   }
 
-  const checkScroll = () => {
+  const checkScroll = useCallback(() => {
     if (!carouselRef.current) return
     const { scrollLeft, scrollWidth, clientWidth } = carouselRef.current
     setCanScrollLeft(scrollLeft > 10)
     setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 10)
-  }
+  }, [])
 
   useEffect(() => {
     const el = carouselRef.current
@@ -71,130 +90,150 @@ export function ReviewsCarousel() {
     el.addEventListener("scroll", checkScroll, { passive: true })
     checkScroll()
     return () => el.removeEventListener("scroll", checkScroll)
-  }, [filteredReviews])
+  }, [checkScroll, filteredReviews])
+
+  // Continuous auto-slide animation: gently advances every 3.2 seconds unless hovered or touched
+  useEffect(() => {
+    if (isPaused) return
+
+    const interval = setInterval(() => {
+      const el = carouselRef.current
+      if (!el) return
+      const maxScroll = el.scrollWidth - el.clientWidth
+      const step = 420
+
+      if (el.scrollLeft >= maxScroll - 20) {
+        // Loop back smoothly to the beginning
+        el.scrollTo({ left: 0, behavior: "smooth" })
+      } else {
+        el.scrollBy({ left: step, behavior: "smooth" })
+      }
+    }, 3200)
+
+    return () => clearInterval(interval)
+  }, [isPaused, filteredReviews])
 
   const scroll = (direction: "left" | "right") => {
     if (!carouselRef.current) return
-    const cardWidth = 340
-    const scrollAmount = direction === "left" ? -cardWidth : cardWidth
+    const scrollAmount = direction === "left" ? -460 : 460
     carouselRef.current.scrollBy({ left: scrollAmount, behavior: "smooth" })
   }
 
   const filters = [
-    { key: "all", label: isBn ? "সমস্ত রিভিউ (১৭)" : "All Reviews (17)" },
-    { key: "behaviour", label: isBn ? "ভালো ব্যবহার (২)" : "Behaviour (2)" },
-    { key: "workmanship", label: isBn ? "কাজের মান (৯)" : "Workmanship (9)" },
-    { key: "budget", label: isBn ? "সাশ্রয়ী বাজেট (২)" : "Budget (2)" },
+    { key: "all", label: isBn ? `সমস্ত রিভিউ (${toBnDigits(17)})` : "All Reviews (17)" },
+    { key: "behaviour", label: isBn ? `ভালো ব্যবহার (${toBnDigits(2)})` : "Behaviour (2)" },
+    { key: "workmanship", label: isBn ? `কাজের মান (${toBnDigits(9)})` : "Workmanship (9)" },
+    { key: "budget", label: isBn ? `সাশ্রয়ী বাজেট (${toBnDigits(2)})` : "Budget (2)" },
   ]
 
-  const bengaliDigits = (num: string | number) => {
-    if (!isBn) return num
-    return String(num)
-      .replace(/0/g, "০")
-      .replace(/1/g, "১")
-      .replace(/2/g, "২")
-      .replace(/3/g, "৩")
-      .replace(/4/g, "৪")
-      .replace(/5/g, "৫")
-      .replace(/6/g, "৬")
-      .replace(/7/g, "৭")
-      .replace(/8/g, "৮")
-      .replace(/9/g, "৯")
-  }
-
   return (
-    <section id="reviews" className="py-20 md:py-28 bg-gradient-to-b from-background via-secondary/30 to-background border-t border-border">
+    <section id="reviews" className="py-24 md:py-32 bg-gradient-to-b from-background via-secondary/20 to-background border-t border-border">
       <div className="container mx-auto px-5 sm:px-8 md:px-12">
         {/* Section Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
           <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-secondary border border-border text-xs uppercase tracking-widest text-[rgb(251,146,60)] font-semibold mb-3">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-secondary border border-border text-xs uppercase tracking-widest text-[rgb(251,146,60)] font-semibold mb-3">
               <GoogleIcon className="w-3.5 h-3.5" />
-              <span>{isBn ? "গুগল রিভিউ ও রেটিং" : "Verified Google Reviews"}</span>
+              <span>{isBn ? `গুগল রেটিং ${toBnDigits("৪.৮")} ★ (${toBnDigits(17)} রিভিউ)` : "Verified Google Reviews • 4.8 ★"}</span>
             </div>
             <h2 className="text-3xl sm:text-5xl md:text-6xl font-medium tracking-tight">
               {isBn ? "গ্রাহকদের সন্তুষ্টি ও মতামত" : "Client Reviews & Ratings"}
             </h2>
-            <p className="text-muted-foreground text-sm sm:text-base mt-2 max-w-xl">
+            <p className="text-muted-foreground text-base sm:text-lg mt-2.5 max-w-2xl leading-relaxed">
               {isBn
-                ? "পূর্ব বর্ধমান জুড়ে আমাদের ক্লায়েন্টদের গুগল ম্যাপসে দেওয়া আসল মতামত ও ৪.৮ স্টার রেটিং।"
-                : "Real feedback and 4.8-star ratings from verified homeowners and office clients on Google Maps."}
+                ? `পূর্ব বর্ধমান জুড়ে আমাদের ক্লায়েন্টদের গুগল ম্যাপসে দেওয়া আসল মতামত ও ${toBnDigits("৪.৮")} স্টার রেটিং।`
+                : "Real feedback and 4.8-star ratings from verified homeowners and office clients in Burdwan."}
             </p>
           </div>
 
-          {/* Navigation Arrows for Carousel */}
-          <div className="flex items-center gap-2">
+          {/* Navigation Controls + Auto-play status */}
+          <div className="flex items-center gap-3">
             <button
-              onClick={() => scroll("left")}
-              disabled={!canScrollLeft}
-              className={`w-11 h-11 rounded-full border border-border flex items-center justify-center transition-all cursor-pointer ${
-                canScrollLeft
-                  ? "bg-card hover:bg-secondary text-foreground hover:scale-105 shadow-sm"
-                  : "bg-muted/30 text-muted-foreground/40 cursor-not-allowed opacity-50"
-              }`}
-              aria-label="Previous review"
+              onClick={() => setIsPaused(!isPaused)}
+              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-full border border-border bg-card hover:bg-secondary text-xs text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
+              title={isPaused ? "Play animation" : "Pause animation"}
             >
-              <ChevronLeft className="w-5 h-5" />
+              {isPaused ? <Play className="w-3.5 h-3.5 text-[rgb(251,146,60)]" /> : <Pause className="w-3.5 h-3.5 text-emerald-500" />}
+              <span className="text-[11px] font-medium">
+                {isPaused ? (isBn ? "চালু করুন" : "Play") : (isBn ? "স্বয়ংক্রিয় চলছে" : "Auto-sliding")}
+              </span>
             </button>
-            <button
-              onClick={() => scroll("right")}
-              disabled={!canScrollRight}
-              className={`w-11 h-11 rounded-full border border-border flex items-center justify-center transition-all cursor-pointer ${
-                canScrollRight
-                  ? "bg-card hover:bg-secondary text-foreground hover:scale-105 shadow-sm"
-                  : "bg-muted/30 text-muted-foreground/40 cursor-not-allowed opacity-50"
-              }`}
-              aria-label="Next review"
-            >
-              <ChevronRight className="w-5 h-5" />
-            </button>
+
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => scroll("left")}
+                disabled={!canScrollLeft}
+                className={`w-12 h-12 rounded-full border border-border flex items-center justify-center transition-all cursor-pointer ${
+                  canScrollLeft
+                    ? "bg-card hover:bg-secondary text-foreground hover:scale-105 shadow-sm"
+                    : "bg-muted/30 text-muted-foreground/40 cursor-not-allowed opacity-50"
+                }`}
+                aria-label="Previous review"
+              >
+                <ChevronLeft className="w-5 h-5" />
+              </button>
+              <button
+                onClick={() => scroll("right")}
+                disabled={!canScrollRight}
+                className={`w-12 h-12 rounded-full border border-border flex items-center justify-center transition-all cursor-pointer ${
+                  canScrollRight
+                    ? "bg-card hover:bg-secondary text-foreground hover:scale-105 shadow-sm"
+                    : "bg-muted/30 text-muted-foreground/40 cursor-not-allowed opacity-50"
+                }`}
+                aria-label="Next review"
+              >
+                <ChevronRight className="w-5 h-5" />
+              </button>
+            </div>
           </div>
         </div>
 
-        {/* Google Summary Score Card & Filters */}
-        <div className="bg-card border border-border rounded-3xl p-6 sm:p-8 shadow-sm mb-8">
-          <div className="grid lg:grid-cols-12 gap-8 items-center">
+        {/* Big Premium Google Score Card */}
+        <div className="bg-card border border-border rounded-3xl p-7 sm:p-10 shadow-sm mb-12">
+          <div className="grid lg:grid-cols-12 gap-8 lg:gap-10 items-center">
             {/* Score box */}
-            <div className="lg:col-span-4 flex items-center gap-5 border-b lg:border-b-0 lg:border-r border-border pb-6 lg:pb-0 lg:pr-8">
-              <div className="flex flex-col items-center justify-center bg-secondary/80 rounded-2xl p-4 w-28 h-28 border border-border">
-                <span className="text-4xl font-bold tracking-tight text-foreground font-mono">
-                  {bengaliDigits(siteConfig.rating.score)}
+            <div className="lg:col-span-4 flex items-center gap-6 border-b lg:border-b-0 lg:border-r border-border pb-7 lg:pb-0 lg:pr-8">
+              <div className="flex flex-col items-center justify-center bg-secondary/80 rounded-3xl p-5 w-32 h-32 sm:w-36 sm:h-36 border border-border flex-shrink-0 shadow-inner">
+                <span className="text-4xl sm:text-5xl font-bold tracking-tight text-foreground">
+                  {toBnDigits("4.8")}
                 </span>
-                <div className="flex items-center gap-0.5 mt-1 text-amber-400">
+                <div className="flex items-center gap-1 mt-1.5 text-amber-400">
                   {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-3.5 h-3.5 fill-amber-400" />
+                    <Star key={i} className="w-4 h-4 fill-amber-400" />
                   ))}
                 </div>
-                <span className="text-[10px] text-muted-foreground mt-1">out of 5.0</span>
+                <span className="text-xs text-muted-foreground mt-1">
+                  {isBn ? `৫.০ এর মধ্যে` : "out of 5.0"}
+                </span>
               </div>
 
-              <div className="flex-1">
-                <div className="flex items-center gap-1.5 mb-1">
-                  <GoogleIcon className="w-4 h-4" />
+              <div>
+                <div className="flex items-center gap-1.5 mb-1.5">
+                  <GoogleIcon className="w-5 h-5" />
                   <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                    Google Rating
+                    Google Maps Rating
                   </span>
                 </div>
-                <h3 className="text-lg font-medium text-foreground">
-                  {bengaliDigits(siteConfig.rating.totalReviews)} {isBn ? "টি গুগল রিভিউ" : "Google Reviews"}
+                <h3 className="text-xl sm:text-2xl font-semibold text-foreground">
+                  {toBnDigits(17)} {isBn ? "টি গুগল রিভিউ" : "Google Reviews"}
                 </h3>
-                <p className="text-xs text-muted-foreground mt-0.5">
-                  {isBn ? "১০০% ভেরিফাইড স্থানীয় ক্লায়েন্ট" : "100% verified local clients in Burdwan"}
+                <p className="text-xs sm:text-sm text-muted-foreground mt-1">
+                  {isBn ? "১০০% যাচাইকৃত স্থানীয় ক্লায়েন্ট (পূর্ব বর্ধমান)" : "100% verified local Burdwan clients"}
                 </p>
                 <a
-                  href={siteConfig.googleReviewUrl}
+                  href={siteConfig.googleMapsUrl}
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex items-center gap-1.5 text-xs font-semibold text-[rgb(251,146,60)] hover:underline mt-2.5"
+                  className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-[rgb(251,146,60)] hover:underline mt-3"
                 >
-                  <span>{isBn ? "গুগলে রিভিউ লিখুন" : "Write a review"}</span>
-                  <ExternalLink className="w-3 h-3" />
+                  <span>{isBn ? "গুগলে সকল রিভিউ দেখুন" : "View all on Google Maps"}</span>
+                  <ExternalLink className="w-3.5 h-3.5" />
                 </a>
               </div>
             </div>
 
             {/* Rating breakdown bars */}
-            <div className="lg:col-span-5 space-y-1.5 border-b lg:border-b-0 lg:border-r border-border pb-6 lg:pb-0 lg:pr-8">
+            <div className="lg:col-span-5 space-y-2 border-b lg:border-b-0 lg:border-r border-border pb-7 lg:pb-0 lg:pr-8">
               {[
                 { stars: 5, count: 15, pct: "88%" },
                 { stars: 4, count: 2, pct: "12%" },
@@ -202,58 +241,58 @@ export function ReviewsCarousel() {
                 { stars: 2, count: 0, pct: "0%" },
                 { stars: 1, count: 0, pct: "0%" },
               ].map((row) => (
-                <div key={row.stars} className="flex items-center gap-3 text-xs">
-                  <span className="w-3 font-mono text-muted-foreground text-right">{bengaliDigits(row.stars)}</span>
-                  <Star className="w-3 h-3 text-amber-400 fill-amber-400 -ml-1" />
-                  <div className="flex-1 h-2 rounded-full bg-secondary overflow-hidden">
+                <div key={row.stars} className="flex items-center gap-3 text-sm">
+                  <span className="w-4 font-semibold text-foreground text-right">{toBnDigits(row.stars)}</span>
+                  <Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400 -ml-1" />
+                  <div className="flex-1 h-2.5 rounded-full bg-secondary overflow-hidden">
                     <div
                       className="h-full bg-amber-400 rounded-full transition-all duration-500"
                       style={{ width: row.pct }}
                     />
                   </div>
-                  <span className="w-7 text-right font-mono text-muted-foreground/70 text-[11px]">
-                    {bengaliDigits(row.count)}
+                  <span className="w-8 text-right font-medium text-muted-foreground text-xs">
+                    {toBnDigits(row.count)}
                   </span>
                 </div>
               ))}
             </div>
 
-            {/* Write review & map badge */}
+            {/* Actions */}
             <div className="lg:col-span-3 flex flex-col gap-3 justify-center">
               <a
                 href={siteConfig.googleReviewUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-full bg-[rgb(251,146,60)] hover:bg-[rgb(234,130,47)] text-white text-xs font-semibold transition-all shadow-md group cursor-pointer"
+                className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full bg-[rgb(251,146,60)] hover:bg-[rgb(234,130,47)] text-white text-xs sm:text-sm font-semibold transition-all shadow-md group cursor-pointer"
               >
-                <MessageSquare className="w-3.5 h-3.5 transition-transform group-hover:scale-110" />
-                <span>{isBn ? "গুগলে রিভিউ দিন" : "Write a Google Review"}</span>
+                <MessageSquare className="w-4 h-4 transition-transform group-hover:scale-110" />
+                <span>{isBn ? "গুগলে রিভিউ লিখুন" : "Write a Google Review"}</span>
               </a>
 
               <a
                 href={siteConfig.googleMapsUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-full border border-border bg-secondary/80 hover:bg-secondary text-xs font-medium text-foreground transition-colors cursor-pointer"
+                className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full border border-border bg-secondary/80 hover:bg-secondary text-xs sm:text-sm font-medium text-foreground transition-colors cursor-pointer"
               >
-                <MapPin className="w-3.5 h-3.5 text-[rgb(251,146,60)]" />
-                <span>{isBn ? "গুগল ম্যাপে লোকেশন দেখুন" : "View on Google Maps"}</span>
+                <MapPin className="w-4 h-4 text-[rgb(251,146,60)]" />
+                <span>{isBn ? "গুগল ম্যাপে লোকেশন" : "View on Google Maps"}</span>
               </a>
             </div>
           </div>
 
           {/* Filter Pills */}
-          <div className="pt-6 mt-6 border-t border-border flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
-            <span className="text-xs uppercase tracking-wider text-muted-foreground font-medium mr-2 flex-shrink-0">
+          <div className="pt-6 mt-6 border-t border-border flex items-center gap-2.5 overflow-x-auto pb-1 scrollbar-none">
+            <span className="text-xs uppercase tracking-wider text-muted-foreground font-semibold mr-2 flex-shrink-0">
               {isBn ? "ফিল্টার:" : "Filter:"}
             </span>
             {filters.map((f) => (
               <button
                 key={f.key}
                 onClick={() => setActiveTag(f.key)}
-                className={`text-xs px-3.5 py-1.5 rounded-full border transition-all cursor-pointer whitespace-nowrap flex-shrink-0 ${
+                className={`text-xs sm:text-sm px-4 py-2 rounded-full border transition-all cursor-pointer whitespace-nowrap flex-shrink-0 ${
                   activeTag === f.key
-                    ? "bg-foreground text-background border-foreground font-semibold shadow-sm"
+                    ? "bg-foreground text-background border-foreground font-semibold shadow-md"
                     : "bg-secondary/60 hover:bg-secondary border-border text-muted-foreground hover:text-foreground font-medium"
                 }`}
               >
@@ -263,10 +302,14 @@ export function ReviewsCarousel() {
           </div>
         </div>
 
-        {/* Unique Ultra-Smooth Carousel */}
+        {/* Big Prominent Auto-Animated Carousel */}
         <div
           ref={carouselRef}
-          className="flex gap-5 overflow-x-auto pb-6 pt-2 scroll-smooth snap-x snap-mandatory scrollbar-thin scrollbar-thumb-border scrollbar-track-transparent -mx-2 px-2"
+          onMouseEnter={() => setIsPaused(true)}
+          onMouseLeave={() => setIsPaused(false)}
+          onTouchStart={() => setIsPaused(true)}
+          onTouchEnd={() => setIsPaused(false)}
+          className="flex gap-6 sm:gap-8 overflow-x-auto pb-8 pt-2 scroll-smooth snap-x snap-mandatory scrollbar-thin scrollbar-thumb-border scrollbar-track-transparent -mx-3 px-3"
           style={{ scrollbarWidth: "thin" }}
         >
           {filteredReviews.map((rev) => {
@@ -276,76 +319,86 @@ export function ReviewsCarousel() {
             return (
               <article
                 key={rev.id}
-                className="w-[300px] sm:w-[350px] md:w-[380px] flex-shrink-0 snap-start bg-card border border-border hover:border-[rgb(251,146,60)]/40 rounded-3xl p-6 flex flex-col justify-between transition-all duration-300 hover:shadow-xl hover:-translate-y-1 group"
+                className="w-[330px] sm:w-[440px] md:w-[490px] lg:w-[520px] min-h-[300px] flex-shrink-0 snap-start bg-card border border-border hover:border-[rgb(251,146,60)]/50 rounded-3xl p-7 sm:p-9 flex flex-col justify-between transition-all duration-300 hover:shadow-2xl hover:-translate-y-1.5 group relative"
               >
                 <div>
                   {/* Reviewer Header */}
-                  <div className="flex items-start justify-between gap-3 mb-4">
-                    <div className="flex items-center gap-3">
+                  <div className="flex items-start justify-between gap-3 mb-5">
+                    <div className="flex items-center gap-4">
                       <div
-                        className={`w-11 h-11 rounded-full bg-gradient-to-tr ${rev.color || "from-amber-500 to-orange-600"} text-white flex items-center justify-center font-bold text-sm shadow-md flex-shrink-0`}
+                        className={`w-13 h-13 sm:w-14 sm:h-14 rounded-full bg-gradient-to-tr ${rev.color || "from-amber-500 to-orange-600"} text-white flex items-center justify-center font-bold text-lg sm:text-xl shadow-lg flex-shrink-0`}
                       >
                         {rev.avatarInitial || rev.name.charAt(0).toUpperCase()}
                       </div>
                       <div>
-                        <h4 className="text-sm font-semibold text-foreground group-hover:text-[rgb(251,146,60)] transition-colors leading-snug">
+                        <h4 className="text-base sm:text-lg font-semibold text-foreground group-hover:text-[rgb(251,146,60)] transition-colors leading-snug">
                           {rev.name}
                         </h4>
-                        <div className="flex items-center gap-1.5 mt-0.5 flex-wrap">
+                        <div className="flex items-center gap-2 mt-1 flex-wrap">
                           {rev.localGuide && (
-                            <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-amber-600 dark:text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded-full border border-amber-500/20">
-                              <Star className="w-2.5 h-2.5 fill-current" />
+                            <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-amber-600 dark:text-amber-400 bg-amber-500/10 px-2.5 py-0.5 rounded-full border border-amber-500/20">
+                              <Star className="w-3 h-3 fill-current" />
                               Local Guide
                             </span>
                           )}
-                          <span className="text-[11px] text-muted-foreground">
-                            {rev.reviewsCount || "Reviewer"}
-                            {rev.photosCount ? ` · ${rev.photosCount}` : ""}
+                          <span className="text-xs text-muted-foreground">
+                            {rev.reviewsCount ? rev.reviewsCount.replace(/(\d+)/g, (m) => toBnDigits(m)) : (isBn ? "রিভিউয়ার" : "Reviewer")}
+                            {rev.photosCount ? ` · ${rev.photosCount.replace(/(\d+)/g, (m) => toBnDigits(m))}` : ""}
                           </span>
                         </div>
                       </div>
                     </div>
 
-                    <GoogleIcon className="w-4 h-4 flex-shrink-0 opacity-80" />
+                    <GoogleIcon className="w-5 h-5 flex-shrink-0 opacity-80" />
                   </div>
 
                   {/* Stars + Time Ago */}
-                  <div className="flex items-center justify-between mb-3.5">
-                    <div className="flex items-center gap-0.5 text-amber-400">
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center gap-1 text-amber-400">
                       {[...Array(rev.rating)].map((_, i) => (
-                        <Star key={i} className="w-4 h-4 fill-amber-400" />
+                        <Star key={i} className="w-4 h-4 sm:w-5 sm:h-5 fill-amber-400" />
                       ))}
                     </div>
-                    <span className="text-xs text-muted-foreground/80">
+                    <span className="text-xs sm:text-sm text-muted-foreground font-medium">
                       {isBn ? rev.timeAgoBn : rev.timeAgo}
                     </span>
                   </div>
 
-                  {/* Review Text */}
-                  <p className="text-sm text-foreground/85 leading-relaxed italic line-clamp-4">
+                  {/* Review Text - Big, Clear & Readable */}
+                  <p className="text-base sm:text-lg text-foreground/90 leading-relaxed italic">
                     “{displayText}”
                   </p>
                 </div>
 
                 {/* Footer of Card: Like + Verified Badge */}
-                <div className="mt-5 pt-4 border-t border-border/70 flex items-center justify-between text-xs text-muted-foreground">
+                <div className="mt-6 pt-5 border-t border-border flex items-center justify-between text-xs sm:text-sm text-muted-foreground">
                   <button
                     onClick={() => handleLike(rev.id)}
                     className="inline-flex items-center gap-1.5 hover:text-[rgb(251,146,60)] transition-colors cursor-pointer"
                     title="Like this review"
                   >
-                    <ThumbsUp className="w-3.5 h-3.5" />
-                    <span>{bengaliDigits(currentLikes)} {isBn ? "পছন্দ" : "Helpful"}</span>
+                    <ThumbsUp className="w-4 h-4" />
+                    <span>{toBnDigits(currentLikes)} {isBn ? "পছন্দ" : "Helpful"}</span>
                   </button>
 
-                  <div className="inline-flex items-center gap-1 text-emerald-600 dark:text-emerald-400 font-medium text-[11px]">
-                    <ShieldCheck className="w-3.5 h-3.5" />
+                  <div className="inline-flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400 font-medium text-xs sm:text-sm">
+                    <ShieldCheck className="w-4 h-4" />
                     <span>{isBn ? "যাচাইকৃত গুগল রিভিউ" : "Verified Google Review"}</span>
                   </div>
                 </div>
               </article>
             )
           })}
+        </div>
+
+        {/* Bottom prompt */}
+        <div className="mt-8 text-center text-xs text-muted-foreground flex items-center justify-center gap-2">
+          <Sparkles className="w-3.5 h-3.5 text-[rgb(251,146,60)]" />
+          <span>
+            {isBn
+              ? `পূর্ব বর্ধমানে বিশ্বস্ত হোম ও অফিস ইন্টেরিয়র সার্ভিস • কল করুন: ${siteConfig.phoneDisplayBn}`
+              : `Trusted home & commercial interior design in Purba Burdwan • Call: ${siteConfig.phoneDisplay}`}
+          </span>
         </div>
       </div>
     </section>
