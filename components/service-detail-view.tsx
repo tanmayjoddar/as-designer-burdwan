@@ -3,7 +3,6 @@
 import Link from "next/link"
 import { useLanguage } from "@/lib/language-context"
 import { BookingForm } from "@/components/booking-form"
-import { CommentSection } from "@/components/comment-section"
 import { ServiceSidebar } from "@/components/service-sidebar"
 import type { ServiceItem } from "@/lib/site-data"
 import { siteConfig } from "@/lib/site-data"
@@ -13,7 +12,7 @@ interface ServiceDetailViewProps {
   service: ServiceItem
   prevService: ServiceItem | null
   nextService: ServiceItem | null
-  initialComments: Array<{
+  initialComments?: Array<{
     id: string
     name: string
     date: string
@@ -25,7 +24,6 @@ export function ServiceDetailView({
   service,
   prevService,
   nextService,
-  initialComments,
 }: ServiceDetailViewProps) {
   const { lang } = useLanguage()
   const isBn = lang === "bn"
@@ -362,13 +360,6 @@ export function ServiceDetailView({
                   </Link>
                 )}
               </div>
-
-              {/* Leave a reply Comment Section */}
-              <CommentSection
-                postTitle={service.title}
-                postTitleBn={service.titleBn}
-                initialComments={initialComments}
-              />
             </div>
 
             {/* Sidebar Column */}

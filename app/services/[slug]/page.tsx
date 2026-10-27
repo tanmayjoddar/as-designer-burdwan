@@ -40,13 +40,6 @@ export default async function ServiceDetailPage({ params }: ServicePageProps) {
   const prevService = serviceIndex > 0 ? servicesData[serviceIndex - 1] : null
   const nextService = serviceIndex < servicesData.length - 1 ? servicesData[serviceIndex + 1] : null
 
-  const initialComments: Array<{
-    id: string
-    name: string
-    date: string
-    comment: string
-  }> = []
-
   return (
     <div className="min-h-screen bg-background text-foreground">
       <Header />
@@ -54,7 +47,6 @@ export default async function ServiceDetailPage({ params }: ServicePageProps) {
         service={service}
         prevService={prevService}
         nextService={nextService}
-        initialComments={initialComments}
       />
       <Footer />
     </div>
