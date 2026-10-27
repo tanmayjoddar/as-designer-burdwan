@@ -6,167 +6,121 @@ import { useLanguage } from "@/lib/language-context"
 
 export function Hero() {
   const { t } = useLanguage()
+  const sectionRef = useRef<HTMLElement>(null)
   const contentRef = useRef<HTMLDivElement>(null)
-  const heroRef = useRef<HTMLElement>(null)
   const titleRef = useRef<HTMLHeadingElement>(null)
-  const [animationProgress, setAnimationProgress] = useState(0)
-  const [animationComplete, setAnimationComplete] = useState(false)
-  const accumulatedScrollRef = useRef(0)
-  const touchStartY = useRef<number>(0)
-  const lastTouchY = useRef<number>(0)
+  const [scrollProgress, setScrollProgress] = useState(0)
 
   useEffect(() => {
-    const handleWheel = (e: WheelEvent) => {
-      const atTopOfPage = window.scrollY === 0
+    let ticking = false
 
-      if (atTopOfPage && !animationComplete) {
-        e.preventDefault()
+    const handleScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          if (!sectionRef.current) {
+            ticking = false
+            return
+          }
 
-        accumulatedScrollRef.current = Math.max(0, Math.min(700, accumulatedScrollRef.current + e.deltaY))
+          const rect = sectionRef.current.getBoundingClientRect()
+          const totalDistance = rect.height - window.innerHeight
 
-        const newProgress = Math.max(0, Math.min(1, accumulatedScrollRef.current / 700))
-        setAnimationProgress(newProgress)
+          if (totalDistance <= 0) {
+            ticking = false
+            return
+          }
 
-        if (newProgress >= 1) {
-          setAnimationComplete(true)
-        }
+          const currentDistance = -rect.top
+          const progress = Math.max(0, Math.min(1, currentDistance / totalDistance))
+          setScrollProgress(progress)
 
-        if (contentRef.current) {
-          const translateY = newProgress * 200
-          const rotationX = newProgress * 45
-          const scale = 1 - newProgress * 0.3
-          contentRef.current.style.transform = `translateY(${translateY}px) rotateX(${rotationX}deg) scale(${scale})`
-        }
-      } else if (atTopOfPage && animationComplete && e.deltaY < 0) {
-        e.preventDefault()
+          if (contentRef.current) {
+            const isMobile = window.innerWidth < 768
+            const translateY = progress * (isMobile ? 120 : 200)
+            const rotationX = progress * (isMobile ? 35 : 45)
+            const scale = 1 - progress * (isMobile ? 0.18 : 0.28)
+            contentRef.current.style.transform = `translateY(${translateY}px) rotateX(${rotationX}deg) scale(${scale})`
+          }
 
-        accumulatedScrollRef.current = Math.max(0, Math.min(700, accumulatedScrollRef.current + e.deltaY))
-
-        const newProgress = Math.max(0, Math.min(1, accumulatedScrollRef.current / 700))
-        setAnimationProgress(newProgress)
-
-        if (newProgress < 1) {
-          setAnimationComplete(false)
-        }
-
-        if (contentRef.current) {
-          const translateY = newProgress * 200
-          const rotationX = newProgress * 45
-          const scale = 1 - newProgress * 0.3
-          contentRef.current.style.transform = `translateY(${translateY}px) rotateX(${rotationX}deg) scale(${scale})`
-        }
+          ticking = false
+        })
+        ticking = true
       }
     }
 
-    const handleTouchStart = (e: TouchEvent) => {
-      touchStartY.current = e.touches[0].clientY
-      lastTouchY.current = e.touches[0].clientY
-    }
-
-    const handleTouchMove = (e: TouchEvent) => {
-      const atTopOfPage = window.scrollY === 0
-      const currentTouchY = e.touches[0].clientY
-      const deltaY = lastTouchY.current - currentTouchY
-
-      if (atTopOfPage && !animationComplete) {
-        e.preventDefault()
-
-        accumulatedScrollRef.current = Math.max(0, Math.min(700, accumulatedScrollRef.current + deltaY * 3))
-
-        const newProgress = Math.max(0, Math.min(1, accumulatedScrollRef.current / 700))
-        setAnimationProgress(newProgress)
-
-        if (newProgress >= 1) {
-          setAnimationComplete(true)
-        }
-
-        if (contentRef.current) {
-          const translateY = newProgress * 200
-          const rotationX = newProgress * 45
-          const scale = 1 - newProgress * 0.3
-          contentRef.current.style.transform = `translateY(${translateY}px) rotateX(${rotationX}deg) scale(${scale})`
-        }
-      } else if (atTopOfPage && animationComplete && deltaY < 0) {
-        e.preventDefault()
-
-        accumulatedScrollRef.current = Math.max(0, Math.min(700, accumulatedScrollRef.current + deltaY * 3))
-
-        const newProgress = Math.max(0, Math.min(1, accumulatedScrollRef.current / 700))
-        setAnimationProgress(newProgress)
-
-        if (newProgress < 1) {
-          setAnimationComplete(false)
-        }
-
-        if (contentRef.current) {
-          const translateY = newProgress * 200
-          const rotationX = newProgress * 45
-          const scale = 1 - newProgress * 0.3
-          contentRef.current.style.transform = `translateY(${translateY}px) rotateX(${rotationX}deg) scale(${scale})`
-        }
-      }
-
-      lastTouchY.current = currentTouchY
-    }
-
-    window.addEventListener("wheel", handleWheel, { passive: false })
-    window.addEventListener("touchstart", handleTouchStart, { passive: false })
-    window.addEventListener("touchmove", handleTouchMove, { passive: false })
+    window.addEventListener("scroll", handleScroll, { passive: true })
+    handleScroll()
 
     return () => {
-      window.removeEventListener("wheel", handleWheel)
-      window.removeEventListener("touchstart", handleTouchStart)
-      window.removeEventListener("touchmove", handleTouchMove)
+      window.removeEventListener("scroll", handleScroll)
     }
-  }, [animationComplete])
+  }, [])
 
   return (
-    <section id="hero" ref={heroRef} className="relative min-h-screen flex items-center justify-center overflow-hidden bg-[#181512]">
-      <div className="absolute inset-0 z-0 bg-[#181512]">
-        <img
-          src="/images/hously-background.png"
-          alt=""
-          className="w-full h-full object-cover object-center"
-        />
-      </div>
+    <section
+      id="hero"
+      ref={sectionRef}
+      className="relative h-[135vh] sm:h-[155vh] md:h-[180vh] bg-[#181512]"
+    >
+      <div className="sticky top-0 h-screen h-[100dvh] w-full flex items-center justify-center overflow-hidden bg-[#181512]">
+        {/* Background Room */}
+        <div className="absolute inset-0 z-0 bg-[#181512]">
+          <img
+            src="/images/hously-background.png"
+            alt=""
+            className="w-full h-full object-cover object-center"
+          />
+        </div>
 
-      <div
-        ref={contentRef}
-        className="container mx-auto px-6 md:px-12 lg:pt-0 relative z-10 pb-0 pl-1 pr-1 pt-8 md:pt-0"
-        style={{
-          willChange: "transform",
-          transform: "translateY(0px)",
-          perspective: "1000px",
-          transformStyle: "preserve-3d",
-        }}
-      >
-        <div className="mb-72 md:mb-60 lg:mb-80">
-          <p className="text-sm tracking-[0.3em] uppercase text-center text-secondary mb-0">{t("hero.label")}</p>
+        {/* 3D Animated Text (between background and foreground island) */}
+        <div
+          ref={contentRef}
+          className="container mx-auto px-4 sm:px-8 md:px-12 relative z-10"
+          style={{
+            willChange: "transform",
+            transform: "translateY(0px)",
+            perspective: "1000px",
+            transformStyle: "preserve-3d",
+          }}
+        >
+          <div className="mb-24 sm:mb-40 md:mb-56 lg:mb-64 text-center">
+            <p className="text-[11px] sm:text-xs md:text-sm tracking-[0.22em] sm:tracking-[0.3em] uppercase text-white/75 mb-2 sm:mb-3 font-medium">
+              {t("hero.label")}
+            </p>
 
-          <h1
-            ref={titleRef}
-            className="text-7xl font-medium text-balance text-center text-white mb-0 tracking-tight leading-[0.9] lg:text-8xl"
-          >
-            {t("hero.title1")}
-            <br />
-            <span className="text-orange-200">{t("hero.title2")}</span>
-          </h1>
+            <h1
+              ref={titleRef}
+              className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-medium tracking-tight leading-[1.15] sm:leading-[1.05] lg:leading-[0.9] text-white"
+            >
+              <span>{t("hero.title1")}</span>
+              <br />
+              <span className="text-orange-200">{t("hero.title2")}</span>
+            </h1>
+          </div>
+        </div>
+
+        {/* Foreground Kitchen Island Counter */}
+        <div className="absolute inset-0 z-20 pointer-events-none">
+          <img
+            src="/images/hously-foreground.png"
+            alt=""
+            className="w-full h-full object-cover object-center"
+          />
+        </div>
+
+        {/* Subtle Scroll Down Prompt (fades out naturally as user scrolls) */}
+        <div
+          className="absolute bottom-5 sm:bottom-10 left-1/2 -translate-x-1/2 z-30 pointer-events-none transition-opacity duration-300 flex flex-col items-center gap-1.5"
+          style={{
+            opacity: Math.max(0, 1 - scrollProgress * 3.5),
+          }}
+        >
+          <span className="text-[10px] uppercase tracking-widest text-white/50 font-medium">
+            Scroll
+          </span>
+          <ArrowDown className="w-3.5 h-3.5 text-white/60 animate-bounce" />
         </div>
       </div>
-
-      <div className="absolute inset-0 z-20 pointer-events-none">
-        <img
-          src="/images/hously-foreground.png"
-          alt=""
-          className="w-full h-full object-cover object-center"
-        />
-      </div>
-
-      {animationComplete && (
-        <div className="absolute bottom-12 left-1/2 -translate-x-1/2 animate-bounce z-30">
-          <ArrowDown className="w-5 h-5 text-muted-foreground" />
-        </div>
-      )}
     </section>
   )
 }

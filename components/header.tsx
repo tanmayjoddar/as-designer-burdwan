@@ -70,13 +70,13 @@ export function Header() {
           className={cn(
             "transition-all duration-500 ease-out flex items-center justify-between pointer-events-auto",
             isFloatingDark
-              ? "w-full max-w-5xl rounded-full bg-primary/95 backdrop-blur-2xl py-2.5 sm:py-3 px-5 sm:px-8 shadow-2xl shadow-black/25 border border-white/20"
-              : "w-full bg-transparent py-5 sm:py-6 px-6 sm:px-10 lg:px-14 border-none shadow-none"
+              ? "w-full max-w-5xl rounded-full bg-primary/95 backdrop-blur-2xl py-2 sm:py-3 px-4 sm:px-8 shadow-2xl shadow-black/25 border border-white/20"
+              : "w-full bg-transparent py-4 sm:py-6 px-4 sm:px-10 lg:px-14 border-none shadow-none"
           )}
         >
           {/* Logo / Brand Name - Clean unified architectural wordmark without any icon badge */}
-          <Link href="/" className="group flex items-center gap-2 relative z-50 py-1">
-            <span className="font-semibold tracking-[0.22em] text-base sm:text-lg text-white uppercase transition-colors group-hover:text-[rgb(251,146,60)] font-sans">
+          <Link href="/" className="group flex items-center gap-1.5 sm:gap-2 relative z-50 py-1">
+            <span className="font-semibold tracking-[0.16em] sm:tracking-[0.22em] text-sm sm:text-base md:text-lg text-white uppercase transition-colors group-hover:text-[rgb(251,146,60)] font-sans">
               AS DESIGNER
             </span>
             <span className="w-1.5 h-1.5 rounded-full bg-[rgb(251,146,60)] transition-transform group-hover:scale-125" />
@@ -116,20 +116,13 @@ export function Header() {
 
           {/* Mobile Header Actions (when drawer is closed) */}
           <div className="lg:hidden flex items-center gap-2">
-            <a
-              href={`tel:${siteConfig.phoneInternational}`}
-              className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-white text-xs border border-white/20"
-              aria-label="Call AS Designer"
-            >
-              <Phone className="w-3.5 h-3.5 text-[rgb(251,146,60)]" />
-            </a>
             <LanguageSwitcher />
             <button
-              className="relative z-50 w-9 h-9 flex items-center justify-center text-white rounded-full bg-white/10 border border-white/15 cursor-pointer"
+              className="relative z-50 w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center text-white rounded-full bg-white/10 border border-white/15 cursor-pointer hover:bg-white/20 transition-colors"
               aria-label="Open menu"
               onClick={() => setMobileMenuOpen(true)}
             >
-              <div className="w-4 h-3.5 relative flex flex-col justify-between">
+              <div className="w-3.5 h-3 sm:w-4 sm:h-3.5 relative flex flex-col justify-between">
                 <span className="w-full h-[1.5px] bg-current rounded-full" />
                 <span className="w-full h-[1.5px] bg-current rounded-full" />
                 <span className="w-full h-[1.5px] bg-current rounded-full" />
