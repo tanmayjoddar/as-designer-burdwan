@@ -207,6 +207,10 @@ export const servicesData: ServiceItem[] = [
       "গোল্ডেন ওয়ার্ক ট্রায়াঙ্গেল মেনে চিমনি, কুকটপ ও সিঙ্কের সুশৃঙ্খল স্থান নির্ধারণ।",
     ],
     image: "/images/services/modular-kitchen.jpg",
+    gallery: [
+      "/images/asdesigner/modular-kitchen-burdwan.jpg",
+      "/images/services/modular-kitchen.jpg",
+    ],
     featured: true,
   },
   {
@@ -483,7 +487,7 @@ Why choose an AS Designer modular kitchen:
 • Granite, quartz, and nano-white countertop options that resist oil and turmeric stains.
 • Effortless cleaning and maintenance.`,
     tags: ["Kitchen Design", "Interior Design", "Modular Kitchen"],
-    image: "/images/asdesigner/IMG-20261027-WA0028.jpg",
+    image: "/images/asdesigner/modular-kitchen-burdwan.jpg",
   },
   {
     id: "modular-kitchen-new",
@@ -505,7 +509,7 @@ Key highlights of the new generation modular kitchens:
 
 For site measurement and modular kitchen 3D designs in Purba Burdwan, call +919874306034.`,
     tags: ["Kitchen Design", "Interior Design"],
-    image: "/images/asdesigner/IMG-20261027-WA0028.jpg",
+    image: "/images/asdesigner/modular-kitchen-burdwan.jpg",
   },
 ]
 

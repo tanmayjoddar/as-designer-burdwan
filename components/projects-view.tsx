@@ -20,6 +20,17 @@ interface ProjectItem {
 
 const allProjects: ProjectItem[] = [
   {
+    id: "p0",
+    title: "Modern Modular Kitchen & Breakfast Bar Arch",
+    titleBn: "মডার্ন মডুলার কিচেন ও ব্রেকফাস্ট বার আর্চ ডিজাইন",
+    category: "Modular Kitchen Design",
+    categoryBn: "মডুলার কিচেন ডিজাইন",
+    image: "/images/asdesigner/modular-kitchen-burdwan.jpg",
+    slug: "modular-kitchen",
+    description: "Rose-tint acrylic modular cabinets, wooden arch partition entrance, pendant breakfast counter, and integrated chimney layout in Burdwan.",
+    descriptionBn: "রোজ-টিন্ট অ্যাক্রিলিক মডুলার ক্যাবিনেট, কাঠের আর্চ পার্টিশন এন্ট্রান্স, পেন্ড্যান্ট লাইট ব্রেকফাস্ট কাউন্টার এবং আধুনিক কিচেন সেটআপ।",
+  },
+  {
     id: "p1",
     title: "Saint-Gobain Gypsum False Ceiling & Cove Lights",
     titleBn: "সেন্ট-গোবেন জিপসাম ফলস সিলিং ও কোভ লাইটিং",
@@ -98,7 +109,7 @@ export function ProjectsView() {
         <div className="container mx-auto px-6 md:px-12">
           <div className="max-w-4xl">
             <span className="text-xs uppercase tracking-widest text-[rgb(251,146,60)] font-semibold mb-3 block">
-              {isBn ? "পোর্টফোলিও ও কাজের নমুনা" : "Portfolio & Showcase"}
+              {isBn ? "সাম্প্রতিক কাজ • পূর্ব বর্ধমান" : "Recent Work in Burdwan"}
             </span>
             <h1 className="text-4xl md:text-6xl font-medium tracking-tight mb-6 text-balance">
               {isBn ? "আমাদের প্রজেক্ট" : "Our Projects"}
