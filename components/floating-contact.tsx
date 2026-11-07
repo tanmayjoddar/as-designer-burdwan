@@ -51,13 +51,20 @@ export function FloatingContact() {
       {expanded && (
         <div className="bg-primary/95 text-primary-foreground backdrop-blur-2xl border border-white/15 shadow-2xl rounded-3xl p-5 w-80 mb-2 animate-in fade-in slide-in-from-bottom-2 duration-300">
           <div className="flex items-center justify-between pb-3 border-b border-white/10 mb-3">
-            <div>
-              <span className="text-[10px] font-semibold uppercase tracking-wider text-[rgb(251,146,60)] block">
-                {isBn ? "সরাসরি পরামর্শ" : "Direct Consultation"}
-              </span>
-              <h5 className="text-base font-medium text-white">
-                {isBn ? "সমরজিৎ শর্মা" : "Samarjit Sharma"}
-              </h5>
+            <div className="flex items-center gap-3">
+              <img
+                src="/images/owner-samarjit-sharma.png"
+                alt="Samarjit Sharma"
+                className="w-10 h-10 rounded-full object-cover border border-white/20 shadow-sm"
+              />
+              <div>
+                <span className="text-[10px] font-semibold uppercase tracking-wider text-[rgb(251,146,60)] block">
+                  {isBn ? "সরাসরি পরামর্শ" : "Direct Consultation"}
+                </span>
+                <h5 className="text-base font-medium text-white">
+                  {isBn ? "সমরজিৎ শর্মা" : "Samarjit Sharma"}
+                </h5>
+              </div>
             </div>
             <button
               onClick={() => setExpanded(false)}

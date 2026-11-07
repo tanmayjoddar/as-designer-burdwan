@@ -16,7 +16,7 @@ export function OwnerPhoto({ className = "" }: OwnerPhotoProps) {
         src="/images/owner-samarjit-sharma.png"
         alt="Samarjit Sharma — Founder & Interior Designer at AS Designer Burdwan"
         draggable={false}
-        className="w-full h-full object-cover object-top select-none pointer-events-none transition-transform duration-700 hover:scale-105"
+        className="w-full h-full object-cover object-center select-none pointer-events-none transition-transform duration-700 hover:scale-105"
         style={{
           WebkitTouchCallout: "none",
           WebkitUserSelect: "none",
